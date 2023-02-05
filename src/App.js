@@ -3,6 +3,9 @@ import './App.css';
 import TMDB from './TMDB.js';
 import React, {useState, useEffect, createContext, useContext} from 'react';
 import Movie from './Movie.js'; 
+import Fetch_movie from './Utilities/Fetch_movie.js'; 
+import Fetch_credits from './Utilities/Fetch_credits';
+import json_sort from './Utilities/json_sort';
 
 function App() {
   const [loaded, set_loaded] = useState(false); 
@@ -12,53 +15,35 @@ function App() {
   const [search, set_search] = useState(); 
   const [movie_id, set_movie_id] = useState(Number(100)); 
 
+
+  //LOAD THE MOVIE DATA AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
   useEffect(() => {
-    const fetchData = async () => {
-      const info = await TMDB().json();
-      set_data(info);
-      
-      set_loaded(true);
-    }
+    Fetch_movie(movie_id)
+    .then((result) => {
+      set_data(result)
+      Fetch_credits(movie_id)
+      .then((creds) =>{
+        set_credits(json_sort(creds,'popularity')); 
+        set_loaded(true); 
+      })
+      .catch((err) => console.log(err)); 
+    }) 
+    .catch((error) => console.log(error)); 
+  }, [movie_id]);
 
-    //fetchData();
-
-  }, []);
-
-  useEffect(() => {
-    fetch_movie();
-  },[movie_id]);
-  
-  const fetch_movie = async () => {
-    let id = movie_id;
-    const data = await fetch('https://api.themoviedb.org/3/movie/'+id+'?api_key='+process.env.REACT_APP_TMDB_API_KEY);
-    const movies = await data.json();
-    set_data(movies);
-    
-    const data2 = await fetch(' https://api.themoviedb.org/3/movie/'+id+'/images?api_key='+process.env.REACT_APP_TMDB_API_KEY);
-    const poster_img = await data2.json();
-    set_poster(poster_img); 
-
-    const data3 = await fetch(' https://api.themoviedb.org/3/movie/'+id+'/credits?api_key='+process.env.REACT_APP_TMDB_API_KEY)
-    const credit_list = await data3.json(); 
-    set_credits(credit_list.cast); 
-
-    let search = "star"
-    let search_2 = 'https://api.themoviedb.org/3/search/movie?query=Avengers&api_key='+process.env.REACT_APP_TMDB_API_KEY +'&page=2'
-    //const data4 = await fetch('https://api.themoviedb.org/3/search/movie?'+'query='+search+'&api_key='+process.env.REACT_APP_TMDB_API_KEY+'&page=1');
-    const data4 = await fetch(search_2)
-    const results = data4; 
-    set_search(results); 
-    set_loaded(true);
-
-  };
 
   const show_poster = () => {
-    let path = poster.posters[0].file_path; 
+    //let path = poster.posters[0].file_path; 
     //data.poster_path also works
     return(
       <>
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+path}></img>
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[0].profile_path}></img>
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+data.poster_path}></img> <br></br>
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[0].profile_path}></img> 
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[1].profile_path}></img> <br></br>
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[2].profile_path}></img> 
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[3].profile_path}></img> <br></br>
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[4].profile_path}></img> 
+      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[5].profile_path}></img>
       </>
     );
 
