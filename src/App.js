@@ -1,101 +1,108 @@
-import logo from './logo.svg';
 import './App.css';
-import TMDB from './TMDB.js';
 import React, {useState, useEffect, createContext, useContext} from 'react';
-import Movie from './Movie.js'; 
 import Fetch_movie from './Utilities/Fetch_movie.js'; 
-import Fetch_people from './Utilities/Fetch_people';
-import Fetch_credits from './Utilities/Fetch_credits';
+import Fetch_movie_credits from './Utilities/Fetch_movie_credits';
+import Fetch_individual from './Utilities/Fetch_individual'; 
+import Fetch_individual_credits from './Utilities/Fetch_individual_credits';
 import json_sort from './Utilities/json_sort';
 import { MovieContext } from './Movie_context';
-import Portrait from './Portrait';
+import Target from './Components/Target'; 
+import Non_target from './Components/Non_target';
+import { Canvas } from '@react-three/fiber'
+import PosterFrame from './Components/PosterFrame'
+import { useCursor, MeshReflectorMaterial, Plane, Text, Environment } from '@react-three/drei'
 
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
-  const [focus_type, set_focus_type] = useState('movie'); 
-  const [focus, set_focus] = useState(Number(1)); 
-  const [credits, set_credits] = useState(); 
-  //FOCUS -> THIS WILL BE EITHER THE DATA FOR A MOVIE OR PERSON, WHICHEVER IS IN FOCUS
-  //PERSON_CREDITS -> IF FOCUS IS PERSON, THIS IS THE LIST OF OTHER PROJECTS THEY ARE IN
-  //MOVIE_CREDITS -> IF FOCUS IS MOVIE, THIS IS THE LIST OF ALL CREDITED PEOPLE IN THE MOVIE
-
-
+  const [focus_type, set_focus_type] = useState(true); //TRUE = MOVIE  FALSE = PERSON
+  const [focus, set_focus] = useState({}); 
+  const [non_focus, set_non_focus] = useState([]); 
+  const [focus_id, set_focus_id] = useState(Number(100)); 
   const [loaded, set_loaded] = useState(false); 
-  const [primary, set_primary] = useState(); 
-  //const [credits, set_credits] = useState(); 
-  const [movie_id, set_movie_id] = useState(Number(100)); 
 
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
   useEffect(() => {
-    Fetch_movie(movie_id)
+    if(focus_type){
+      get_data_movie_focus(); 
+    }
+    else{
+      get_data_person_focus();
+    }
+  }, [focus_type, focus_id]);
+
+  const get_data_movie_focus = () => {
+    Fetch_movie(focus_id)
     .then((result) => {
-      set_primary(result)
-      Fetch_people(movie_id)
+      set_focus(result); 
+      Fetch_movie_credits(focus_id)
       .then((creds) =>{
-        set_credits(json_sort(creds,'popularity')); 
+        set_non_focus(json_sort(creds,'popularity')); 
         set_loaded(true); 
       })
       .catch((err) => console.log(err)); 
     }) 
     .catch((error) => console.log(error)); 
-  }, [movie_id]);
 
-  const get_credits = (id) => {
-    Fetch_credits(id)
-    .then((results) => console.log("Credits", results))
-    .catch((err) => console.log(err))
   }
 
-  const show_poster = () => {
-    //let path = poster.posters[0].file_path; 
-    //primary.poster_path also works
-    return(
-      <>
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+primary.poster_path}></img> <br></br>
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[0].profile_path}></img> 
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[1].profile_path}></img> <br></br>
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[2].profile_path}></img> 
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[3].profile_path}></img> <br></br>
-      <img style={{width:'300px'}} src={'https://image.tmdb.org/t/p/original'+credits[4].profile_path}></img> 
-      {portrait(5)}
-      </>
-    );
+  const get_data_person_focus = () =>{
+    Fetch_individual(focus_id)
+    .then((result) => {
+      set_focus(result); 
+      Fetch_individual_credits(focus_id)
+      .then((movies) =>{
+        set_non_focus(json_sort(movies,'popularity')); 
+        set_loaded(true); 
+      })
+      .catch((err) => console.log(err)); 
+    }) 
+    .catch((error) => console.log(error)); 
+
   }
 
 
-  const portrait = (index) =>{
 
 
-    return (
-      <img 
-        style={{width:'300px'}} 
-        src={'https://image.tmdb.org/t/p/original'+credits[index].profile_path}
-        onClick={()=>get_credits(credits[index].id)}
-      >
-      </img>
 
-    )
 
-  }
 
   return (
-    <MovieContext.Provider value={{primary, focus, set_focus}}>
+    <MovieContext.Provider value={{set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
       <div className="App">
-        <button onClick={()=>set_movie_id(movie_id-1)}>Back</button>
-        <button onClick={()=>set_movie_id(movie_id+1)}>Next</button>
+     
+    {/*
+        {loaded ? <Target /> : null }
         <br></br>
-        {loaded ? <>{primary.title}</>: console.log('not loaded')}
-        <br></br>
+        {loaded ? <Non_target /> : null }
+    */}
+      <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
+          <ambientLight />
+          <color attach="background" args={['#ffffff']} />
+          <fog attach="fog" args={['#191920', 0, 15]} />
+          <group position={[0, 0.5, 0]}>
+            <PosterFrame url={'https://image.tmdb.org/t/p/w300/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg'}/>
 
-        {loaded ? <>{primary.release_date}</>: console.log('not loaded')}
-        {loaded ? console.log('primary', primary): console.log('not loaded')}
-        <br></br>
-        {loaded ? <>{show_poster()}</>: console.log('not loaded')}
-        <br></br>
+            <mesh rotation={[-Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[50, 50]} />
+              <MeshReflectorMaterial
+                blur={[300, 100]}
+                resolution={2048}
+                mixBlur={1}
+                mixStrength={50}
+                roughness={1}
+                depthScale={1.2}
+                minDepthThreshold={0.4}
+                maxDepthThreshold={1.4}
+                color="#050505"
+                metalness={0.5}
+              />
+            </mesh>
+          </group>
+          <Environment preset="city" />
+        </Canvas>
 
       </div>
-      <Portrait />
     </MovieContext.Provider>
   );
 }
