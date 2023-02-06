@@ -11,11 +11,12 @@ function Portrait(props) {
         >
         </img>
 */
-    const {primary} = useContext(MovieContext)   
+    const {primary, set_focus, focus} = useContext(MovieContext)   
 
     return (
         <>
-            {console.log('this is', primary)}
+            <button onClick={()=>set_focus(focus+1)}> Increment Focus</button>
+            This is the value of {focus}
         </>
 
     )
