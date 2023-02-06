@@ -1,6 +1,9 @@
 import React, {useState, useEffect,  createContext} from "react";
-import Movie_provider from './Movie_provider.js'; 
 
+//NEEDS TO KEEP TRACK OF FOCUS TYPE -> MOVIE OR PERSON
+//NEEDS TO KEEP TRACK OF IDS BASED ON THE ABOVE
+
+/*
 const Movie_provider = () =>{
 
     const MovieContext = createContext({movie_id: 11})
@@ -13,3 +16,8 @@ const Movie_provider = () =>{
     )
 }
 export default Movie_provider
+
+*/
+
+
+export const MovieContext = createContext({}); 
