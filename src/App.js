@@ -10,6 +10,7 @@ import Target from './Components/Target';
 import Non_target from './Components/Non_target';
 import { Canvas } from '@react-three/fiber'
 import PosterFrame from './Components/PosterFrame'
+import PosterCollection from './Components/PosterCollection';
 import { useCursor, MeshReflectorMaterial, Plane, Text, Environment } from '@react-three/drei'
 
 function App() {
@@ -81,7 +82,7 @@ function App() {
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
           <group position={[0, 0.5, 0]}>
-            <PosterFrame url={'https://image.tmdb.org/t/p/w300/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg'}/>
+            <PosterCollection />
 
             <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[50, 50]} />
