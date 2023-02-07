@@ -20,6 +20,7 @@ function App() {
   const [non_focus, set_non_focus] = useState([]); 
   const [focus_id, set_focus_id] = useState(Number(100)); 
   const [loaded, set_loaded] = useState(false); 
+  const [poster_count, set_poster_count] = useState(Number(8)); 
 
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
@@ -63,13 +64,44 @@ function App() {
   }
 
 
+  function ForwardCanvas({ children }) {
+    return (
+      <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
+          <ambientLight />
+          <color attach="background" args={['#ffffff']} />
+          <fog attach="fog" args={['#191920', 0, 15]} />
+          <group position={[0, 0.5, 0]}>
+          <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
+            {children}
+          </MovieContext.Provider>
+          <mesh rotation={[-Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[50, 50]} />
+              <MeshReflectorMaterial
+                blur={[300, 100]}
+                resolution={2048}
+                mixBlur={1}
+                mixStrength={50}
+                roughness={1}
+                depthScale={1.2}
+                minDepthThreshold={0.4}
+                maxDepthThreshold={1.4}
+                color="#050505"
+                metalness={0.5}
+              />
+            </mesh>
+          </group>
+          <Environment preset="city" />
+        </Canvas>
+    )
+  }
+
+
 
 
 
 
 
   return (
-    <MovieContext.Provider value={{set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
       <div className="App">
      
     {/*
@@ -77,14 +109,17 @@ function App() {
         <br></br>
         {loaded ? <Non_target /> : null }
     */}
+
+
       <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
           <ambientLight />
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
           <group position={[0, 0.5, 0]}>
+          <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
             <PosterCollection />
-
-            <mesh rotation={[-Math.PI / 2, 0, 0]}>
+          </MovieContext.Provider>
+          <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[50, 50]} />
               <MeshReflectorMaterial
                 blur={[300, 100]}
@@ -103,8 +138,10 @@ function App() {
           <Environment preset="city" />
         </Canvas>
 
+
+
+
       </div>
-    </MovieContext.Provider>
   );
 }
 

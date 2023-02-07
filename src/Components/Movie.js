@@ -1,8 +1,9 @@
 import React, {useContext} from 'react';
 import { MovieContext } from '../Movie_context'
 
+//RETURNS THE POSTER URL PATH AND THE MOVIE'S TITLE
 
-function Movie(props) {
+function Movie(index) {
     const {set_loaded, focus, non_focus,  set_focus_id, focus_type, set_focus_type} = useContext(MovieContext)   
 
 
@@ -12,7 +13,7 @@ function Movie(props) {
         //IF THE FOCUS IS NOT A MOVIE, WE NEED TO CHANGE THE CONTEXT
         if(!focus_type){
             set_loaded(false);
-            set_focus_id(non_focus[props.index].id); 
+            set_focus_id(non_focus[index].id); 
             set_focus_type(true);
 
             
@@ -20,20 +21,20 @@ function Movie(props) {
     }
 
     let path = ''; 
-    let title = ''; 
+    let name = ''; 
     if(focus_type){
         path = focus.poster_path;
-        title = focus.original_title
+        name = focus.original_title
     }
     else{
-        path = non_focus[props.index].poster_path
-        title = non_focus[props.index].original_title
+        path = non_focus[index].poster_path
+        name = non_focus[index].original_title
     }
 
     
 
 
-
+    /*
     return (
         <>
         <img 
@@ -44,6 +45,8 @@ function Movie(props) {
         </img>
         </>
     )
+    */
+    return {path:path, name:name}
 }
 
 export default Movie

@@ -1,14 +1,16 @@
 import React, {useContext} from 'react'
 import { MovieContext } from '../Movie_context'
 
-function Portrait(props) {
+
+//RETURNS THE POSTER URL PATH AND PERSON'S NAME
+function Portrait(index) {
     const {set_loaded,focus, non_focus, set_focus_id, focus_type, set_focus_type} = useContext(MovieContext)   
 
 
     const handle_click = () => {
         if(focus_type){
             set_loaded(false);
-            set_focus_id(non_focus[props.index].id);
+            set_focus_id(non_focus[index].id);
             set_focus_type(false);
              
         }
@@ -23,13 +25,13 @@ function Portrait(props) {
         name = focus.name; 
     }
     else{
-        path += non_focus[props.index].profile_path
-        name = non_focus[props.index].name; 
+        path += non_focus[index].profile_path
+        name = non_focus[index].name; 
     }
 
 
 //https://image.tmdb.org/t/p/original/yRI8MDB5sg8b8EZkzFz5cCBrnKL.jpg
-    
+    /*
     return (
         <>
         <img 
@@ -41,6 +43,10 @@ function Portrait(props) {
 
         </>
     )
+
+    */
+
+    return {path:path, name:name}
     
     
       
