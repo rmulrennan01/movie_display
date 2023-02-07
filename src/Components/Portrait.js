@@ -1,21 +1,10 @@
-import React, {useContext} from 'react'
-import { MovieContext } from '../Movie_context'
 
 
 //RETURNS THE POSTER URL PATH AND PERSON'S NAME
-function Portrait(index) {
-    const {set_loaded,focus, non_focus, set_focus_id, focus_type, set_focus_type} = useContext(MovieContext)   
+const Portrait = (index, focus, non_focus, focus_type) => {
 
-
-    const handle_click = () => {
-        if(focus_type){
-            set_loaded(false);
-            set_focus_id(non_focus[index].id);
-            set_focus_type(false);
-             
-        }
-    }
-
+    console.log('ran portrait'); 
+    
 
     let path = 'https://image.tmdb.org/t/p/w300'; 
     let name = '';
@@ -29,28 +18,11 @@ function Portrait(index) {
         name = non_focus[index].name; 
     }
 
-
-//https://image.tmdb.org/t/p/original/yRI8MDB5sg8b8EZkzFz5cCBrnKL.jpg
-    /*
-    return (
-        <>
-        <img 
-            style={{width:'300px'}} 
-            src={path}
-            onClick = {() => handle_click()}
-        >
-        </img>
-
-        </>
-    )
-
-    */
+    console.log('path', path)
+    console.log('name', name); 
 
     return {path:path, name:name}
     
-    
-      
-
 }
 
 export default Portrait

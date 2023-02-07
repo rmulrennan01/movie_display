@@ -11,7 +11,7 @@ import Non_target from './Components/Non_target';
 import { Canvas } from '@react-three/fiber'
 import PosterFrame from './Components/PosterFrame'
 import PosterCollection from './Components/PosterCollection';
-import { useCursor, MeshReflectorMaterial, Plane, Text, Environment } from '@react-three/drei'
+import { useCursor, MeshReflectorMaterial, Plane, Text, Environment, OrbitControls } from '@react-three/drei'
 
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
@@ -64,54 +64,14 @@ function App() {
   }
 
 
-  function ForwardCanvas({ children }) {
-    return (
-      <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
-          <ambientLight />
-          <color attach="background" args={['#ffffff']} />
-          <fog attach="fog" args={['#191920', 0, 15]} />
-          <group position={[0, 0.5, 0]}>
-          <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
-            {children}
-          </MovieContext.Provider>
-          <mesh rotation={[-Math.PI / 2, 0, 0]}>
-              <planeGeometry args={[50, 50]} />
-              <MeshReflectorMaterial
-                blur={[300, 100]}
-                resolution={2048}
-                mixBlur={1}
-                mixStrength={50}
-                roughness={1}
-                depthScale={1.2}
-                minDepthThreshold={0.4}
-                maxDepthThreshold={1.4}
-                color="#050505"
-                metalness={0.5}
-              />
-            </mesh>
-          </group>
-          <Environment preset="city" />
-        </Canvas>
-    )
-  }
-
-
-
-
 
 
 
   return (
       <div className="App">
      
-    {/*
-        {loaded ? <Target /> : null }
-        <br></br>
-        {loaded ? <Non_target /> : null }
-    */}
-
-
-      <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
+        <Canvas dpr={[1, 1.5]} camera={{ fov: 65, position: [0, 2, -10] }}>
+          <OrbitControls />
           <ambientLight />
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
@@ -120,7 +80,7 @@ function App() {
             <PosterCollection />
           </MovieContext.Provider>
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
-              <planeGeometry args={[50, 50]} />
+              <planeGeometry args={[100, 100]} />
               <MeshReflectorMaterial
                 blur={[300, 100]}
                 resolution={2048}
