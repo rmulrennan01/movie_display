@@ -16,11 +16,11 @@ import { useCursor, MeshReflectorMaterial, Plane, Text, Environment, OrbitContro
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
   const [focus_type, set_focus_type] = useState(true); //TRUE = MOVIE  FALSE = PERSON
-  const [focus, set_focus] = useState({}); 
-  const [non_focus, set_non_focus] = useState([]); 
-  const [focus_id, set_focus_id] = useState(Number(100)); 
+  const [focus, set_focus] = useState(null); 
+  const [non_focus, set_non_focus] = useState(null); 
+  const [focus_id, set_focus_id] = useState(Number(105)); 
   const [loaded, set_loaded] = useState(false); 
-  const [poster_count, set_poster_count] = useState(Number(8)); 
+  const [poster_count, set_poster_count] = useState(Number(12)); 
 
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
@@ -31,7 +31,9 @@ function App() {
     else{
       get_data_person_focus();
     }
-  }, [focus_type, focus_id]);
+  }, [focus_id]);
+
+
 
   const get_data_movie_focus = () => {
     Fetch_movie(focus_id)
@@ -64,6 +66,22 @@ function App() {
   }
 
 
+  const show_posters = () =>{
+    if(loaded){
+
+
+      return(           
+        <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
+          <PosterCollection />
+        </MovieContext.Provider>)
+    }
+    else{
+      return <></>
+    }
+
+
+  }
+
 
 
 
@@ -76,9 +94,9 @@ function App() {
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
           <group position={[0, 0.5, 0]}>
-          <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
-            <PosterCollection />
-          </MovieContext.Provider>
+            <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
+              <PosterCollection />
+            </MovieContext.Provider>
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[100, 100]} />
               <MeshReflectorMaterial
