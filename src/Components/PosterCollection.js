@@ -5,7 +5,6 @@ import { useCursor, MeshReflectorMaterial, Image, Text, Environment } from '@rea
 import PosterFrame from './PosterFrame';
 import Non_target from './Non_target'
 import Target from './Target'; 
-import { MovieContext } from '../Movie_context';
 
 
 

@@ -9,7 +9,7 @@ function Non_target() {
     const [ready, set_ready] = useState(false);
     const [locations, set_locations] = useState();
     const radius = 4; 
-    const poster_count = 8;
+    const poster_count = 14;
 
     useEffect(() => {        
         get_positions();

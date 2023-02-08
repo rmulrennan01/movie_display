@@ -25,6 +25,8 @@ function App() {
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
   useEffect(() => {
+    set_focus(null);
+    set_non_focus(null); 
     if(focus_type){
       get_data_movie_focus(); 
     }
@@ -117,8 +119,8 @@ function App() {
         </Canvas>
 
 
-
-
+      <button onClick={()=>set_focus_id(focus_id -1)}>Prev</button>
+      <button onClick={()=>set_focus_id(focus_id +1)}>Next</button>
       </div>
   );
 }
