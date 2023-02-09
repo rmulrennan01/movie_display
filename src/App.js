@@ -6,12 +6,12 @@ import Fetch_individual from './Utilities/Fetch_individual';
 import Fetch_individual_credits from './Utilities/Fetch_individual_credits';
 import json_sort from './Utilities/json_sort';
 import { MovieContext } from './Movie_context';
-import Target from './Components/Target'; 
-import Non_target from './Components/Non_target';
 import { Canvas } from '@react-three/fiber'
-import PosterFrame from './Components/PosterFrame'
 import PosterCollection from './Components/PosterCollection';
 import { useCursor, MeshReflectorMaterial, Plane, Text, Environment, OrbitControls } from '@react-three/drei'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment, set } from './State_management/focusSlice'
 
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
@@ -21,6 +21,9 @@ function App() {
   const [focus_id, set_focus_id] = useState(Number(105)); 
   const [loaded, set_loaded] = useState(false); 
   const [poster_count, set_poster_count] = useState(Number(12)); 
+
+  const count = useSelector((state) => state.focus.value)
+  const dispatch = useDispatch()
 
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
@@ -119,8 +122,12 @@ function App() {
         </Canvas>
 
 
-      <button onClick={()=>set_focus_id(focus_id -1)}>Prev</button>
-      <button onClick={()=>set_focus_id(focus_id +1)}>Next</button>
+      <button onClick={()=>set_focus_id(focus_id -10)}>Prev</button>
+      <button onClick={()=>set_focus_id(focus_id +10)}>Next</button>
+      <button onClick={()=>dispatch(increment())}> Try Redux</button>
+      <button onClick={()=>dispatch(set(3))}> set to 3</button>
+      
+      {count}
       </div>
   );
 }
