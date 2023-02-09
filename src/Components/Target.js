@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import PosterFrame from './PosterFrame'; 
 import PosterImage from './PosterImage'; 
 
@@ -10,9 +10,7 @@ function Target() {
   
     return(
         <PosterFrame 
-        url={null} 
-        name = {null} 
-        id={null} 
+        id={-1} 
         pos={[0,1,-6]} 
         angle={Math.PI}
         label={-1}

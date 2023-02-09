@@ -4,31 +4,19 @@ import Fetch_movie from './Utilities/Fetch_movie.js';
 import Fetch_movie_credits from './Utilities/Fetch_movie_credits';
 import Fetch_individual from './Utilities/Fetch_individual'; 
 import Fetch_individual_credits from './Utilities/Fetch_individual_credits';
-import json_sort from './Utilities/json_sort';
-import { MovieContext } from './Movie_context';
 import { Canvas } from '@react-three/fiber'
 import PosterCollection from './Components/PosterCollection';
-import { useCursor, MeshReflectorMaterial, Plane, Text, Environment, OrbitControls } from '@react-three/drei'
-
+import { MeshReflectorMaterial, Plane, Text, Environment, OrbitControls } from '@react-three/drei'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { setFocus} from './State_management/focusSlice';
 import { setNonFocus } from './State_management/nonFocusSlice';
-import {switchType} from './State_management/typeSlice'; 
+import {setID, switchTypeAndID} from './State_management/typeSlice'; 
 
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
-  const [focus_type, set_focus_type] = useState(true); //TRUE = MOVIE  FALSE = PERSON
-  const [focus, set_focus] = useState(null); 
-  const [non_focus, set_non_focus] = useState(null); 
-  const [focus_id, set_focus_id] = useState(Number(105)); 
-  const [loaded, set_loaded] = useState(false); 
-  const [poster_count, set_poster_count] = useState(Number(12)); 
 
-  const count = useSelector((state) => state.focus.value);
-  const url = useSelector((state) => state.focus.url); 
-  const other = useSelector((state) => state.nonFocus.value);
   const type = useSelector((state) => state.type.value)
+  const id = useSelector((state) => state.type.id)
   const dispatch = useDispatch()
 
 
@@ -36,28 +24,24 @@ function App() {
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
   useEffect(() => {
-    set_focus(null);
-    set_non_focus(null); 
-    if(focus_type){
+   
+    if(type == 'movie'){
       get_data_movie_focus(); 
     }
     else{
       get_data_person_focus();
     }
-  }, [focus_id]);
+  }, [id, type ]);
 
 
 
   const get_data_movie_focus = () => {
-    Fetch_movie(focus_id)
+    Fetch_movie(id)
     .then((result) => {
-      set_focus(result); 
       dispatch(setFocus(result));
-      Fetch_movie_credits(focus_id)
+      Fetch_movie_credits(id)
       .then((creds) =>{
-        set_non_focus(json_sort(creds,'popularity')); 
         dispatch(setNonFocus(creds));
-        set_loaded(true); 
       })
       .catch((err) => console.log(err)); 
     }) 
@@ -66,39 +50,18 @@ function App() {
   }
 
   const get_data_person_focus = () =>{
-    Fetch_individual(focus_id)
+    Fetch_individual(id)
     .then((result) => {
-      set_focus(result); 
       dispatch(setFocus(result));
-      Fetch_individual_credits(focus_id)
+      Fetch_individual_credits(id)
       .then((movies) =>{
-        set_non_focus(json_sort(movies,'popularity')); 
-        dispatch(setNonFocus(movies));
-        set_loaded(true); 
+        dispatch(setNonFocus(movies)); 
       })
       .catch((err) => console.log(err)); 
     }) 
     .catch((error) => console.log(error)); 
 
   }
-
-
-  const show_posters = () =>{
-    if(loaded){
-
-
-      return(           
-        <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
-          <PosterCollection />
-        </MovieContext.Provider>)
-    }
-    else{
-      return <></>
-    }
-
-
-  }
-
 
 
 
@@ -111,9 +74,7 @@ function App() {
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
           <group position={[0, 0.5, 0]}>
-            <MovieContext.Provider value={{poster_count, set_loaded, focus, set_focus, non_focus, set_non_focus, focus_type, set_focus_type, focus_id, set_focus_id}}>
-              <PosterCollection />
-            </MovieContext.Provider>
+          <PosterCollection />
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[100, 100]} />
               <MeshReflectorMaterial
@@ -134,12 +95,8 @@ function App() {
         </Canvas>
 
 
-      <button onClick={()=>set_focus_id(focus_id -10)}>Prev</button>
-      <button onClick={()=>set_focus_id(focus_id +10)}>Next</button>
-      {loaded ? url : null}
-      {loaded ? console.log(other) : null}
-      <button onClick={()=>dispatch(switchType())}>Type</button>
-      {type}
+      <button onClick={()=>dispatch(setID(id-1))}>Prev</button>
+      <button onClick={()=>dispatch(setID(id+1))}>Next</button>
 
       </div>
   );

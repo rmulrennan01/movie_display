@@ -37,12 +37,10 @@ function Non_target() {
     const build_posters = (item, index) => {
         return(
             <PosterFrame 
-            url={null} 
-            name = {null} 
-            id={null} 
+            id={index} 
             pos={locations[index].position} 
             angle={locations[index].angle}
-            label={index}
+            key={index+'nonFocus'}
             >
                 <PosterImage   target={false} index={index}/>
             </PosterFrame>
