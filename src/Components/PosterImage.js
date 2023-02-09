@@ -1,35 +1,26 @@
 import React, {useState, useContext, useEffect} from 'react'
 import { Image, Text } from '@react-three/drei'
-import {MovieContext} from '../Movie_context.js'; 
-
+import { useSelector, useDispatch } from 'react-redux'
 
 function PosterImage(props) {
-    const {focus, focus_type, non_focus, focus_id} = useContext(MovieContext)   
 
     const [url, set_url] = useState(null); 
+    
+    const focus = useSelector((state)=>state.focus.value)
+    const focus_url = useSelector((state)=>state.focus.url);
+    const nonFocus = useSelector((state)=>state.nonFocus.value);
 
     useEffect(() => {
         //IF IT IS THE MAIN TARGET POSTER
         if(props.target){
-            if(focus_type && focus != null){
-                set_url('https://image.tmdb.org/t/p/w300' + focus.poster_path)
-            }
-            else if (!focus_type && focus !=null){
-                set_url('https://image.tmdb.org/t/p/w300' + focus.profile_path)
-            }
+            set_url(focus_url); 
         } 
         //IF IT IS A BACKGROUND POSTER
         else{
-            if(!focus_type && non_focus != null){
-                set_url('https://image.tmdb.org/t/p/w300' + non_focus[props.index].poster_path)
-            }
-            else if (focus_type && non_focus !=null){
-                set_url('https://image.tmdb.org/t/p/w300' + non_focus[props.index].profile_path)
-            }
-
+            set_url(nonFocus[props.index].url);
         }
 
-    }, [focus_id])
+    }, [focus])
 
 
     if(url != null){

@@ -1,10 +1,8 @@
 import React from 'react';
 import * as THREE from 'three'
-import { useContext, useRef, useState, useEffect} from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useCursor, MeshReflectorMaterial, Image, Text, Environment } from '@react-three/drei'
-import {MovieContext} from '../Movie_context.js'; 
-import { PropertyBinding } from 'three';
+import { useRef, useState} from 'react'
+import { Text } from '@react-three/drei'
+import PosterLabel from './PosterLabel'; 
 
 
 function PosterFrame(props) {
@@ -49,7 +47,7 @@ function PosterFrame(props) {
         */}
         {props.children}
         <Text  anchorX="center" color='black' anchorY="top" position={[0, .75, 0]} fontSize={.1}>
-          TODO
+          {PosterLabel(props.label)}
         </Text>
       </mesh>
 

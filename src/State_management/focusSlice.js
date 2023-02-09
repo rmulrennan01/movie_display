@@ -1,28 +1,45 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit'
 
+/*
+    MOVIES:
+    'https://image.tmdb.org/t/p/w300' + poster_path
+    original_title
+    id
+
+*/
+
+/* PEOPLE 
+    'https://image.tmdb.org/t/p/w300' +profile_path
+    name
+    id
+*/
+
+
+
 export const focusSlice = createSlice({
   name: 'focus',
   initialState: {
-    value: 0,
+    value: null,
+    url:null,
+    type:null,
+    displayName:null,
   },
   reducers: {
-    set: (state, action) =>{
-      state.value = action.payload
+    setFocus: (state, action) =>{
+      if(action.payload.hasOwnProperty('poster_path')){
+        state.value = action.payload
+        state.url = 'https://image.tmdb.org/t/p/w300' + action.payload.poster_path
+        state.type = 'movie'
+        state.displayName = action.payload.title + ' (' + action.payload.release_date.slice(0, 4) + ')'  
+      }
+      else if (action.payload.hasOwnProperty('profile_path')){
+        state.value = action.payload;
+        state.url = 'https://image.tmdb.org/t/p/w300' + action.payload.profile_path;
+        state.type = 'person';
+        state.displayName = action.payload.name;
+      }
     },
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
-    },
-    decrement: (state) => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
-    }
- 
+     
   },
 })
 
@@ -31,6 +48,6 @@ export const focusSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, set} = focusSlice.actions
+export const { setFocus} = focusSlice.actions
 
 export default focusSlice.reducer

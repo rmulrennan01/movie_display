@@ -42,6 +42,7 @@ function Non_target() {
             id={null} 
             pos={locations[index].position} 
             angle={locations[index].angle}
+            label={index}
             >
                 <PosterImage   target={false} index={index}/>
             </PosterFrame>

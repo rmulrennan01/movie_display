@@ -15,6 +15,7 @@ function Target() {
         id={null} 
         pos={[0,1,-6]} 
         angle={Math.PI}
+        label={-1}
         >
             <PosterImage   target={true}/>
         </PosterFrame>

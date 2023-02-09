@@ -11,7 +11,10 @@ import PosterCollection from './Components/PosterCollection';
 import { useCursor, MeshReflectorMaterial, Plane, Text, Environment, OrbitControls } from '@react-three/drei'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment, set } from './State_management/focusSlice'
+
+import { setFocus} from './State_management/focusSlice';
+import { setNonFocus } from './State_management/nonFocusSlice';
+import {switchType} from './State_management/typeSlice'; 
 
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
@@ -22,9 +25,14 @@ function App() {
   const [loaded, set_loaded] = useState(false); 
   const [poster_count, set_poster_count] = useState(Number(12)); 
 
-  const count = useSelector((state) => state.focus.value)
+  const count = useSelector((state) => state.focus.value);
+  const url = useSelector((state) => state.focus.url); 
+  const other = useSelector((state) => state.nonFocus.value);
+  const type = useSelector((state) => state.type.value)
   const dispatch = useDispatch()
 
+
+  
 
   //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
   useEffect(() => {
@@ -44,9 +52,11 @@ function App() {
     Fetch_movie(focus_id)
     .then((result) => {
       set_focus(result); 
+      dispatch(setFocus(result));
       Fetch_movie_credits(focus_id)
       .then((creds) =>{
         set_non_focus(json_sort(creds,'popularity')); 
+        dispatch(setNonFocus(creds));
         set_loaded(true); 
       })
       .catch((err) => console.log(err)); 
@@ -59,9 +69,11 @@ function App() {
     Fetch_individual(focus_id)
     .then((result) => {
       set_focus(result); 
+      dispatch(setFocus(result));
       Fetch_individual_credits(focus_id)
       .then((movies) =>{
         set_non_focus(json_sort(movies,'popularity')); 
+        dispatch(setNonFocus(movies));
         set_loaded(true); 
       })
       .catch((err) => console.log(err)); 
@@ -124,10 +136,11 @@ function App() {
 
       <button onClick={()=>set_focus_id(focus_id -10)}>Prev</button>
       <button onClick={()=>set_focus_id(focus_id +10)}>Next</button>
-      <button onClick={()=>dispatch(increment())}> Try Redux</button>
-      <button onClick={()=>dispatch(set(3))}> set to 3</button>
-      
-      {count}
+      {loaded ? url : null}
+      {loaded ? console.log(other) : null}
+      <button onClick={()=>dispatch(switchType())}>Type</button>
+      {type}
+
       </div>
   );
 }
