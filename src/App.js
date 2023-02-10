@@ -11,58 +11,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setFocus} from './State_management/focusSlice';
 import { setNonFocus } from './State_management/nonFocusSlice';
 import {setID, switchTypeAndID} from './State_management/typeSlice'; 
+import store from './State_management/store'
+import { Provider } from 'react-redux'
 
 function App() {
   //FOCUS TYPE -> MOVIE OR PERSON
 
-  const type = useSelector((state) => state.type.value)
-  const id = useSelector((state) => state.type.id)
-  const dispatch = useDispatch()
-
-
-  
-
-  //LOAD THE MOVIE primary AND THE CREDIT LIST -> DEPENDENCY IS IF MOVIE_ID STATE CHANGES
-  useEffect(() => {
-   
-    if(type == 'movie'){
-      get_data_movie_focus(); 
-    }
-    else{
-      get_data_person_focus();
-    }
-  }, [id, type ]);
-
-
-
-  const get_data_movie_focus = () => {
-    Fetch_movie(id)
-    .then((result) => {
-      dispatch(setFocus(result));
-      Fetch_movie_credits(id)
-      .then((creds) =>{
-        dispatch(setNonFocus(creds));
-      })
-      .catch((err) => console.log(err)); 
-    }) 
-    .catch((error) => console.log(error)); 
-
-  }
-
-  const get_data_person_focus = () =>{
-    Fetch_individual(id)
-    .then((result) => {
-      dispatch(setFocus(result));
-      Fetch_individual_credits(id)
-      .then((movies) =>{
-        dispatch(setNonFocus(movies)); 
-      })
-      .catch((err) => console.log(err)); 
-    }) 
-    .catch((error) => console.log(error)); 
-
-  }
-
+ // const type = useSelector((state) => state.type.value)
+  //const id = useSelector((state) => state.type.id)
+  //const dispatch = useDispatch()
 
 
   return (
@@ -74,7 +31,10 @@ function App() {
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
           <group position={[0, 0.5, 0]}>
-          <PosterCollection />
+          <Provider store={store}>
+
+            <PosterCollection />
+          </Provider>
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[100, 100]} />
               <MeshReflectorMaterial
@@ -94,9 +54,6 @@ function App() {
           <Environment preset="city" />
         </Canvas>
 
-
-      <button onClick={()=>dispatch(setID(id-1))}>Prev</button>
-      <button onClick={()=>dispatch(setID(id+1))}>Next</button>
 
       </div>
   );

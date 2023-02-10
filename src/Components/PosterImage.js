@@ -32,7 +32,7 @@ function PosterImage(props) {
             }
         }
 
-    }, [nonFocus])
+    }, [id, nonFocus, focus])
 
   
 

@@ -9,7 +9,7 @@ function Non_target() {
     const [ready, set_ready] = useState(false);
     const [locations, set_locations] = useState();
     const radius = 4; 
-    const poster_count = 14;
+    const poster_count = 12;
 
     useEffect(() => {        
         get_positions();
@@ -22,8 +22,6 @@ function Non_target() {
         let temp_locations = [];
         for(let i = 0; i < poster_count; i++){
             let rotation = i * radians; //THIS IS HOW MUCH THE POSTER NEEDS TO BE ROTATED TO FACE THE CENTER
-            //let x = radius * Math.sin(Math.PI * 2 * angle / 360);
-            //let y = radius * Math.cos(Math.PI * 2 * angle / 360);
             let x = radius * Math.sin(rotation);
             let z = radius * Math.cos(rotation);
             temp_locations.push({position:[x,1,z], angle:rotation+Math.PI})
