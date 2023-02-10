@@ -19,16 +19,20 @@ function PosterImage(props) {
     useEffect(() => {
         //IF IT IS THE MAIN TARGET POSTER
         if(props.target){
-            set_url(focus_url); 
-            set_name(focus_display_name); 
+            if(focus_url != null && focus_url != undefined){
+                set_url(focus_url); 
+                set_name(focus_display_name); 
+            }
         } 
         //IF IT IS A BACKGROUND POSTER
         else{
-            set_url(nonFocus[props.index].url);
-            set_name(nonFocus[props.index].displayName)
+            if(nonFocus != null && nonFocus != undefined && nonFocus[props.index] != undefined){
+                set_url(nonFocus[props.index].url);
+                set_name(nonFocus[props.index].displayName)
+            }
         }
 
-    }, [id, type])
+    }, [nonFocus])
 
   
 

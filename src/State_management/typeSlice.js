@@ -13,7 +13,7 @@ export const typeSlice = createSlice({
     },
     switchTypeAndID: (state, action) => {
         state.id = action.payload
-        if(state.value == 'movie'){
+        if(state.value === 'movie'){
             state.value = 'person'
         }
         else{
