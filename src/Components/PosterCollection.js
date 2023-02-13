@@ -54,7 +54,7 @@ function PosterCollection() {
 
         group_ref.current.rotation.y = speed +vel2;
         //group_ref.current.rotation.y += a*Math.PI; 
-        console.log('vel2', vel2, 'speed', speed); 
+       // console.log('vel2', vel2, 'speed', speed); 
 
    
     

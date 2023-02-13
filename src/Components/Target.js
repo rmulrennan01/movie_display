@@ -13,16 +13,18 @@ import { setNonFocus } from '../State_management/nonFocusSlice';
 import {setID, switchTypeAndID} from '../State_management/typeSlice'; 
 
 //THIS DETERMINES WHAT THE CENTER FOCUSED POSTER IS AND THEN GENERATES A 3D POSTER OBJECT
+import {useGetMovieQuery} from '../State_management/tmdbApi';
 
 
 function Target() {
+  const dispatch = useDispatch()
+
     const targetRef = useRef();
     const [active, set_active] = useState(0);
     const id = useSelector((state) => state.type.id)
     const focus = useSelector((state) => state.value)
     const type = useSelector((state) => state.type.value)
-    const dispatch = useDispatch()
-
+    const { data, error, isLoading } = useGetMovieQuery(100)
     useEffect(() => {
         
         if(type === 'movie'){
@@ -87,6 +89,9 @@ function Target() {
     return(
         <a.mesh ref = {targetRef} position={[0,1,-6]} rotation-y={rotation} onClick={()=>handle_click()}>
             {console.log(targetRef.current)}
+            {console.log('data: ',  data)}
+            {console.log('error: ',  error)}
+            {console.log('isLoading: ',  isLoading)}
             <PosterFrame 
             id={-1} 
             pos={[0,0,0]} 
