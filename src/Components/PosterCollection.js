@@ -64,11 +64,13 @@ function PosterCollection() {
     //            <a.group ref={group_ref} position={[0,0,-6]} rotation-y={rotation} onClick={()=>set_active(Number(!active))}>
 
 
+    //<a.group ref={group_ref} position={[0,0,-6]}  onClick={()=>set_active(true)}>
     return (
         
         <>
+            
             <Target />
-            <a.group ref={group_ref} position={[0,0,-6]}  onClick={()=>set_active(true)}>
+            <a.group ref={group_ref} position={[0,0,-6]}  >
                 <Non_target />
             </a.group>
         </>

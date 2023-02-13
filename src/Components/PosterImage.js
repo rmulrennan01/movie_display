@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react'
 import { Image, Text } from '@react-three/drei'
 import { useSelector, useDispatch } from 'react-redux'
+import {useGetMovieQuery} from '../State_management/tmdbApi';
 
 function PosterImage(props) {
 
@@ -14,15 +15,26 @@ function PosterImage(props) {
 
     const type = useSelector((state) => state.type.value)
     const id = useSelector((state) => state.type.id)
-    
+
+   
 
     useEffect(() => {
         //IF IT IS THE MAIN TARGET POSTER
+       // let data = startFetch(id);
         if(props.target){
+            
             if(focus_url != null && focus_url != undefined){
                 set_url(focus_url); 
                 set_name(focus_display_name); 
             }
+            
+           //if(data != undefined){
+          // set_url('https://image.tmdb.org/t/p/w300' + data.poster_path);
+
+           //state.url = 'https://image.tmdb.org/t/p/w300' + action.payload.poster_path
+           //}
+
+
         } 
         //IF IT IS A BACKGROUND POSTER
         else{
@@ -32,10 +44,9 @@ function PosterImage(props) {
             }
         }
 
-    }, [id, nonFocus, focus])
+    }, [id, nonFocus, type, focus])
 
-  
-
+ 
 
     if(url != null){
         return(
