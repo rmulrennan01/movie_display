@@ -9,7 +9,7 @@ function PosterImage(props) {
     
     const focus = useSelector((state)=>state.focus.value)
     const focus_url = useSelector((state)=>state.focus.url);
-    const nonFocus = useSelector((state)=>state.nonFocus.value);    
+    const nonFocus = useSelector((state)=>state.nonFocus.value);   
     const focus_display_name = useSelector((state)=>state.focus.displayName);
 
     const type = useSelector((state) => state.type.value)

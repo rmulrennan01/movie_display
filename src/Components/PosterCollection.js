@@ -7,7 +7,7 @@ import Non_target from './Non_target'
 import Target from './Target'; 
 import { useSelector, useDispatch } from 'react-redux'
 import { MathUtils } from 'three';
-
+import {toggleNonFocusReload} from '../State_management/nonFocusSlice';
 
 function PosterCollection() {
     const [active, set_active] = useState(false);
@@ -17,6 +17,7 @@ function PosterCollection() {
     const id = useSelector((state) => state.type.id)
     const nonFocusReload = useSelector((state) =>state.nonFocus.reload);
     const focusReload = useSelector((state) =>state.focus.reload);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         set_active(Number(!active))
@@ -33,21 +34,16 @@ function PosterCollection() {
         const elapsedTime = clock.getElapsedTime();
         const diff = elapsedTime - time
         const speed = 0.5 * elapsedTime;
-        if(active){
-            set_time(clock.getElapsedTime());
-            set_active(false);
-        }
         if(nonFocusReload){
-            set_active(true);
+            set_time(clock.getElapsedTime());
+            dispatch(toggleNonFocusReload());
         }
-        //const vel = MathUtils.lerp(0.15, 8, Math.sqrt(b)); 
+
         const boost_dampen = MathUtils.damp(1,5,2, diff); 
         group_ref.current.rotation.y = speed + boost_dampen;
-       
-
-   
-    
-
+        if(nonFocusReload <= Math.PI){
+            //dispatch(toggleNonFocusReload());
+        }
     });
 
  

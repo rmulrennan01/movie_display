@@ -4,7 +4,7 @@ import { useRef, useState} from 'react'
 import { Text } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useSelector, useDispatch } from 'react-redux'
-
+import {toggleNonFocusReload} from '../State_management/nonFocusSlice';
 
 
 function PosterFrame(props) {
@@ -15,7 +15,8 @@ function PosterFrame(props) {
     const [display, set_display] = useState('')
   //    const hide = useSelector((state) => state.type.hide)
     const nonFocusVisibility = useSelector((state) =>state.nonFocus.visibility);
-    
+    const nonFocusReload = useSelector((state) => state.nonFocus.reload);
+
 
 
 
@@ -41,10 +42,10 @@ function PosterFrame(props) {
     const toggle_visible = (item, enable) =>{
       let ref_target = new THREE.Vector3;
       item.getWorldPosition(ref_target);
-      if(!enable && ref_target.z <= -9){
+      if(!enable && ref_target.z <= -7 && ref_target.x <=-3){
         this_mesh.current.visible = false
       }
-      if(enable && ref_target.z <= -9){
+      if(enable && ref_target.z <= -7 && ref_target.x <=-3){
         this_mesh.current.visible = true
       }
 

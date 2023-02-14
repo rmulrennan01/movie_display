@@ -18,11 +18,12 @@ import { createSlice, createSelector } from '@reduxjs/toolkit'
 export const focusSlice = createSlice({
   name: 'focus',
   initialState: {
-    value: 16869,
+    value: null,
+    id: 16869,
     url:null,
     type:null,
     displayName:null,
-    reload:null
+    reload:false
   },
   reducers: {
     setFocus: (state, action) =>{
@@ -39,6 +40,9 @@ export const focusSlice = createSlice({
         state.displayName = action.payload.name;
       }
     },
+    setFocusID: (state, action) =>{
+      state.id = action.payload
+    },
   
     toggleFocusReload : (state) =>{
         state.reload = !state.reload
@@ -52,6 +56,6 @@ export const focusSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { setFocus, toggleFocusReload} = focusSlice.actions
+export const { setFocus, setFocusID, toggleFocusReload} = focusSlice.actions
 
 export default focusSlice.reducer
