@@ -76,7 +76,11 @@ function PosterFrame(props) {
       const matrix = new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
       frustum2.setFromProjectionMatrix(matrix)
       if (!frustum2.containsPoint(ref_target)) {
-          return this_mesh.current.visible = false; 
+          
+            setTimeout(() => {
+              this_mesh.current.visible = false
+          }, "500")
+            
 
       }
   
