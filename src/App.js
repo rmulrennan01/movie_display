@@ -6,7 +6,7 @@ import Fetch_individual from './Utilities/Fetch_individual';
 import Fetch_individual_credits from './Utilities/Fetch_individual_credits';
 import { Canvas } from '@react-three/fiber'
 import PosterCollection from './Components/PosterCollection';
-import { MeshReflectorMaterial, Plane, Text, Environment, OrbitControls } from '@react-three/drei'
+import { MeshReflectorMaterial, Plane, Text, Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { useSelector, useDispatch } from 'react-redux'
 import { setFocus} from './State_management/focusSlice';
 import { setNonFocus } from './State_management/nonFocusSlice';
@@ -22,11 +22,12 @@ function App() {
   //const dispatch = useDispatch()
 
 
+
+
   return (
       <div className="App">
      
         <Canvas dpr={[1, 1.5]} camera={{ fov: 65, position: [0, 2, -10] }}>
-          <OrbitControls />
           <ambientLight />
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />

@@ -4,6 +4,8 @@ import PosterFrame from './PosterFrame';
 import { useFrame } from '@react-three/fiber'
 import {useThree} from '@react-three/fiber'
 import * as THREE from 'three'
+import {setID, switchTypeAndID, setHide} from '../State_management/typeSlice'; 
+import { useSelector, useDispatch } from 'react-redux'
 
 
 function Non_target() {
@@ -20,6 +22,11 @@ function Non_target() {
     const state = useThree();
     const camera = useThree((state)=>state.camera);
     const frustum = new THREE.Frustum();
+    const dispatch = useDispatch()
+    const type = useSelector((state) => state.type.value)
+    const hide = useSelector((state) => state.type.hide)
+
+
 //    frustum.setFromMatrix( camera.projectionMatrix );
 
     const target = new THREE.Vector3(0,0,-6);
@@ -27,6 +34,7 @@ function Non_target() {
 
     useEffect(() => {        
         get_positions();
+
     }, [])
 
     useFrame(({ clock }) => {
@@ -36,7 +44,7 @@ function Non_target() {
             poster_ref.current.map(set_visibility);
 
         }
-     
+        console.log(state);
 
     });
 
@@ -56,9 +64,9 @@ function Non_target() {
 
     const set_visibility = (item) =>{
         let ref_target = new THREE.Vector3;
-        let child = item.children[0].children[0];
+        let child = item.children[0];
         child.getWorldPosition(ref_target);
-        if(check_visible(ref_target)){
+        if(!check_visible(item.position)){
             console.log('inside map', item);
             item.visible = false; 
         }
@@ -120,7 +128,7 @@ function Non_target() {
         <>
             {console.log(camera)}
             {ready ? this_array.map(build_posters) : null}
-            <mesh position={[0,3,0]} onClick={()=>set_disappear(!disappear)}>
+            <mesh position={[0,3,0]} onClick={()=>dispatch(setHide(!hide))}>
                 <boxGeometry args={[1,1,1]} />
             </mesh>
 

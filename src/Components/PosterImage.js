@@ -1,7 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react'
 import { Image, Text } from '@react-three/drei'
 import { useSelector, useDispatch } from 'react-redux'
-import {useGetMovieQuery} from '../State_management/tmdbApi';
 
 function PosterImage(props) {
 
