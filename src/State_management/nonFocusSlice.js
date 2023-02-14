@@ -48,12 +48,19 @@ export const nonFocusSlice = createSlice({
   name: 'nonFocus',
   initialState: {
     value: null,
+    visibility: true,
+    reload: false,
   },
   reducers: {
     setNonFocus: (state, action) =>{
         state.value = add_urls(action.payload);
-        
     },
+    toggleNonFocusVisibility : (state) =>{
+        state.visibility = !state.visibility;
+    },
+    toggleNonFocusReload : (state) =>{
+        state.reload = !state.reload
+    }
      
   },
 })
@@ -63,6 +70,6 @@ export const nonFocusSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setNonFocus} = nonFocusSlice.actions
+export const {setNonFocus, toggleNonFocusVisibility, toggleNonFocusReload} = nonFocusSlice.actions
 
 export default nonFocusSlice.reducer

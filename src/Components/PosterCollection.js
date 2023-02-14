@@ -5,7 +5,6 @@ import * as THREE from 'three'
 
 import Non_target from './Non_target'
 import Target from './Target'; 
-import { useSpring, a } from '@react-spring/three'
 import { useSelector, useDispatch } from 'react-redux'
 import { MathUtils } from 'three';
 
@@ -16,63 +15,50 @@ function PosterCollection() {
     const [movement, set_movement] = useState(false);
     const nonFocus = useSelector((state)=>state.nonFocus.value);
     const id = useSelector((state) => state.type.id)
-
+    const nonFocusReload = useSelector((state) =>state.nonFocus.reload);
+    const focusReload = useSelector((state) =>state.focus.reload);
 
     useEffect(() => {
         set_active(Number(!active))
     }, [id])
 
-    //const { scale } = useSpring({ scale: active ? 1.5 : 1 })
-    const {spring}  = useSpring({
-        spring: active,
-        config: { mass: 5, tension: 50, friction: 20, precision: 0.0001,clamp:true, loop:false},
-        onRest: ()=>set_movement(true)
-     
-      });
-    const rotation = spring.to([0, 1], [0, Math.PI*20]);
-
-
     const [time, set_time] =  useState(null); 
    
     
     useFrame(({ clock }) => {
+        //INITIATE BASE TIME
         if(time == null){
             set_time(clock.getElapsedTime()); 
         }
-     
-        const b = clock.getElapsedTime();
-        const diff = b - time
-        const speed = 0.5 * b;
+        const elapsedTime = clock.getElapsedTime();
+        const diff = elapsedTime - time
+        const speed = 0.5 * elapsedTime;
         if(active){
             set_time(clock.getElapsedTime());
             set_active(false);
         }
+        if(nonFocusReload){
+            set_active(true);
+        }
         //const vel = MathUtils.lerp(0.15, 8, Math.sqrt(b)); 
-        const vel2 = MathUtils.damp(1,200,2, diff); 
-
-    
-
-        group_ref.current.rotation.y = speed +vel2;
-        //group_ref.current.rotation.y += a*Math.PI; 
-       // console.log('vel2', vel2, 'speed', speed); 
+        const boost_dampen = MathUtils.damp(1,5,2, diff); 
+        group_ref.current.rotation.y = speed + boost_dampen;
+       
 
    
     
 
     });
 
-    //            <a.group ref={group_ref} position={[0,0,-6]} rotation-y={rotation} onClick={()=>set_active(Number(!active))}>
-
-
-    //<a.group ref={group_ref} position={[0,0,-6]}  onClick={()=>set_active(true)}>
+ 
     return (
         
         <>
             
             <Target />
-            <a.group ref={group_ref} position={[0,0,-6]}  >
+            <group ref={group_ref} position={[0,0,-6]}  >
                 <Non_target />
-            </a.group>
+            </group>
         </>
         
     )

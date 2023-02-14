@@ -28,6 +28,7 @@ function App() {
       <div className="App">
      
         <Canvas dpr={[1, 1.5]} camera={{ fov: 65, position: [0, 2, -10] }}>
+          <OrbitControls />
           <ambientLight />
           <color attach="background" args={['#ffffff']} />
           <fog attach="fog" args={['#191920', 0, 15]} />

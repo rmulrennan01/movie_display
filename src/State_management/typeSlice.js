@@ -5,8 +5,8 @@ export const typeSlice = createSlice({
   name: 'type',
   initialState: {
     value: 'movie',
-    id: Number(120),
-    hide: false
+    id: Number(16869),
+ 
 
   },
   reducers: {
@@ -22,9 +22,7 @@ export const typeSlice = createSlice({
             state.value = 'movie'
         }
     },
-    setHide: (state, action) =>{
-        state.hide = action.payload
-    }
+
   }
     
 })
@@ -34,6 +32,6 @@ export const typeSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const {setID, switchTypeAndID, setHide} = typeSlice.actions
+export const {setID, switchTypeAndID} = typeSlice.actions
 
 export default typeSlice.reducer

@@ -18,28 +18,24 @@ function PosterImage(props) {
    
 
     useEffect(() => {
-        //IF IT IS THE MAIN TARGET POSTER
-       // let data = startFetch(id);
+              
         if(props.target){
-            
             if(focus_url != null && focus_url != undefined){
                 set_url(focus_url); 
                 set_name(focus_display_name); 
             }
-            
-           //if(data != undefined){
-          // set_url('https://image.tmdb.org/t/p/w300' + data.poster_path);
-
-           //state.url = 'https://image.tmdb.org/t/p/w300' + action.payload.poster_path
-           //}
-
-
+            else{
+              //  set_url('https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg')
+            }
         } 
-        //IF IT IS A BACKGROUND POSTER
+
         else{
             if(nonFocus != null && nonFocus != undefined && nonFocus[props.index] != undefined){
                 set_url(nonFocus[props.index].url);
                 set_name(nonFocus[props.index].displayName)
+            }
+            else{
+               // set_url('https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg')
             }
         }
 

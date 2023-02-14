@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import PosterFrame from './PosterFrame'; 
 import PosterImage from './PosterImage'; 
 import { useFrame } from '@react-three/fiber'
-import { useSpring, a } from '@react-spring/three'
 import { useSelector, useDispatch } from 'react-redux'
 import Fetch_movie from '../Utilities/Fetch_movie'
 import Fetch_movie_credits from '../Utilities/Fetch_movie_credits'
@@ -12,16 +11,18 @@ import { setFocus} from '../State_management/focusSlice';
 import { setNonFocus } from '../State_management/nonFocusSlice';
 import {setID, switchTypeAndID} from '../State_management/typeSlice'; 
 
+import * as THREE from 'three'
 
 
 function Target() {
   const dispatch = useDispatch()
 
     const targetRef = useRef();
-    const [active, set_active] = useState(0);
+    const [active, set_active] = useState(false);
     const id = useSelector((state) => state.type.id)
     const focus = useSelector((state) => state.value)
     const type = useSelector((state) => state.type.value)
+    const [time, set_time] = useState();
     useEffect(() => {
         
         if(type === 'movie'){
@@ -40,7 +41,7 @@ function Target() {
           Fetch_movie_credits(id)
           .then((creds) =>{
             dispatch(setNonFocus(creds));
-            set_active(Number(!active));
+            set_active(true);
           })
           .catch((err) => console.log(err)); 
         }) 
@@ -55,7 +56,7 @@ function Target() {
           Fetch_individual_credits(id)
           .then((movies) =>{
             dispatch(setNonFocus(movies)); 
-            set_active(Number(!active));
+            set_active(Number(true));
           })
           .catch((err) => console.log(err)); 
         }) 
@@ -65,37 +66,40 @@ function Target() {
 
 
     useFrame(({ clock }) => {
-      // const a = clock.getElapsedTime();
-       // const speed = THREE.MathUtils.damp(.8,.15,100,clock.getDelta()) * a ;
-       //targetRef.current.children[0].children[0].rotation.y = a * 2;
+   
+      if(time == null){
+        set_time(clock.getElapsedTime()); 
+      }
+
+      const current_time = clock.getElapsedTime();
+      const diff = current_time - time
+      if(active){
+          set_time(clock.getElapsedTime());
+          set_active(false);
+      }
+      const boost_damp = THREE.MathUtils.damp(Math.PI*4,Math.PI*8,2, diff); 
+      targetRef.current.rotation.y = boost_damp;
 
     });
-    const { spring } = useSpring({
-        spring: active,
-        config: { mass: 5, tension: 100, friction: 50, precision: 0.0001 },
-      });
-      const rotation = spring.to([0, 1], [0, Math.PI*8])
-     
 
+
+ 
     const handle_click = () => {
-        set_active(Number(!active));
-
+        set_active(true)
         dispatch(setID(Math.floor(Math.random() * 1000)));
     }
   
     return(
-        <a.mesh ref = {targetRef} position={[0,1,-6]} rotation-y={rotation} onClick={()=>handle_click()}>
-
+        <mesh ref = {targetRef} position={[0,1,-6]} onClick={()=>handle_click()}>
             <PosterFrame 
             id={-1} 
             pos={[0,0,0]} 
             angle={Math.PI}
             label={-1}
-            
             >
                 <PosterImage   target={true}/>
             </PosterFrame>
-        </a.mesh>
+        </mesh>
     );
 
 }
