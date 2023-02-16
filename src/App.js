@@ -1,36 +1,31 @@
 import './App.css';
-import React, {useState, useEffect, createContext, useContext} from 'react';
-import Fetch_movie from './Utilities/Fetch_movie.js'; 
-import Fetch_movie_credits from './Utilities/Fetch_movie_credits';
-import Fetch_individual from './Utilities/Fetch_individual'; 
-import Fetch_individual_credits from './Utilities/Fetch_individual_credits';
+import React, {useRef} from 'react';
+import * as THREE from 'three'
+import { useFrame } from '@react-three/fiber'
+import { MeshReflectorMaterial, Plane, Text, Environment, OrbitControls, SpotLight } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import PosterCollection from './Components/PosterCollection';
-import { MeshReflectorMaterial, Plane, Text, Environment, OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { useSelector, useDispatch } from 'react-redux'
-import { setFocus} from './State_management/focusSlice';
-import { setNonFocus } from './State_management/nonFocusSlice';
-import {setID, switchTypeAndID} from './State_management/typeSlice'; 
+import RandomLight from './Components/RandomLight'
+
 import store from './State_management/store'
 import { Provider } from 'react-redux'
 
 function App() {
-  //FOCUS TYPE -> MOVIE OR PERSON
-
- // const type = useSelector((state) => state.type.value)
-  //const id = useSelector((state) => state.type.id)
-  //const dispatch = useDispatch()
-
-
+  const target = new THREE.Object3D()
 
 
   return (
       <div className="App">
+
+
      
         <Canvas dpr={[1, 1.5]} camera={{ fov: 65, position: [0, 2, -10] }}>
           <OrbitControls />
-          <ambientLight />
-          <color attach="background" args={['#ffffff']} />
+          {/*<ambientLight /> */}
+          {/*<pointLight position={[0, 4, 0]} intensity={4}/> */}
+          <RandomLight target={target} />
+          <primitive object={target} position={[0, 0, -6]} />
+          <color attach="background" args={['#000000']} />
           <fog attach="fog" args={['#191920', 0, 15]} />
           <group position={[0, 0.5, 0]}>
           <Provider store={store}>
@@ -40,7 +35,7 @@ function App() {
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <planeGeometry args={[100, 100]} />
               <MeshReflectorMaterial
-                blur={[300, 100]}
+                blur={[0, 0]}
                 resolution={2048}
                 mixBlur={1}
                 mixStrength={50}
@@ -55,6 +50,15 @@ function App() {
           </group>
           <Environment preset="city" />
         </Canvas>
+
+        <h3> React Three Fiber with TMDB API </h3>
+        <div>
+          Click the film poster to load a random film along with its cast!
+        </div>
+        <h3> Credits</h3>
+        <div>
+          This demo uses the TMDB API but is not endorsed or certified by TMDB.
+        </div>
 
 
       </div>

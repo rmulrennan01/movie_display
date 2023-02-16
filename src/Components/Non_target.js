@@ -13,7 +13,7 @@ function Non_target() {
     const poster_ref = useRef([])
     const dispatch = useDispatch()
 
-
+    //FOR INITIAL LOAD ONLY -> NO DEPENDENCIES
     useEffect(() => {        
         get_positions();
     }, [])
@@ -39,9 +39,8 @@ function Non_target() {
 
 
 
-
+    //MAP FUNCTION TO CREATE POSTER FRAMES USING POSITIONS CALCULATED IN THE GET_POSITIONS CALL
     const build_posters = (item, index) => {
-
         return(
             <mesh ref={el => poster_ref.current[index] = el} >
             <PosterFrame 
@@ -56,14 +55,17 @@ function Non_target() {
         );
     }
 
-
+    //ARRAY JUST FOR RUNNING MAP FUNCTION WITH INDEXES
     const this_array = new Array(poster_count).fill(0)
+
     return(
         <>
             {ready ? this_array.map(build_posters) : null}
+            {/*
             <mesh position={[0,3,0]} onClick={()=>dispatch(toggleNonFocusVisibility())}>
                 <boxGeometry args={[1,1,1]} />
             </mesh>
+            */}
 
         </>
     )

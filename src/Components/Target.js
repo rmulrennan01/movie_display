@@ -43,7 +43,13 @@ function Target() {
         dispatch(setFocus(result));
         Fetch_movie_credits(id)
         .then((creds) =>{
-          dispatch(setNonFocus(creds));
+          dispatch(setNonFocus(creds));        
+          setTimeout( ()=>{
+           // dispatch(toggleNonFocusReload()); //added
+            dispatch(toggleNonFocusVisibility()); //added
+    
+           },"1000")
+
         })
         .catch((err) => console.log(err)); 
       }) 
@@ -62,6 +68,11 @@ function Target() {
       .then((movies) =>{
         dispatch(setNonFocus(movies)); 
         //set_active(Number(true));
+        setTimeout( ()=>{
+          //dispatch(toggleNonFocusReload()); //added
+          dispatch(toggleNonFocusVisibility()); //added
+  
+         },"1000")
 
       })
       .catch((err) => console.log(err)); 
@@ -81,7 +92,7 @@ function Target() {
         set_time(clock.getElapsedTime());
         dispatch(toggleFocusReload());
     }
-    const boost_damp = THREE.MathUtils.damp(Math.PI*4,Math.PI*16,2, diff); 
+    const boost_damp = THREE.MathUtils.damp(Math.PI*4,Math.PI*24,2, diff); 
     targetRef.current.rotation.y = boost_damp;
 
   });
@@ -91,12 +102,13 @@ function Target() {
     const handle_click = () => {
         dispatch(toggleNonFocusVisibility());
         dispatch(setFocusID(Math.floor(Math.random() * 1000)));
+        //dispatch(toggleNonFocusReload());
+        //dispatch(toggleNonFocusVisibility());
         setTimeout( ()=>{
-          //dispatch(toggleNonFocusReload());
-          dispatch(toggleNonFocusReload());
-          dispatch(toggleNonFocusVisibility());
+         // dispatch(toggleNonFocusReload());
+          //dispatch(toggleNonFocusVisibility());
  
-        },"2500"
+        },"1000"
         )
     }
   

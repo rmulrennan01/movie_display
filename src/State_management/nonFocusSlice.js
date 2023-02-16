@@ -48,7 +48,7 @@ export const nonFocusSlice = createSlice({
   name: 'nonFocus',
   initialState: {
     value: null,
-    visibility: true,
+    visibility: false,
     reload: false,
   },
   reducers: {
