@@ -30,7 +30,7 @@ function PosterCollection() {
             set_time(clock.getElapsedTime()); 
             dispatch(toggleNonFocusReload());
         }
-        const boost_dampen = MathUtils.damp(Math.PI,Math.PI*6,2, diff); 
+        const boost_dampen = MathUtils.damp(Math.PI,Math.PI*10,2, diff); 
         group_ref.current.rotation.y = speed + boost_dampen; //APPLY ROTATION ANIMATION
 
     });

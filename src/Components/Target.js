@@ -25,6 +25,10 @@ function Target() {
   const [time, set_time] = useState();
 
   useEffect(() => {
+    setTimeout(() => {
+      dispatch(toggleNonFocusVisibility()); //MAKE VISIBLE
+      dispatch(toggleNonFocusReload()); //MAKE ACCELERATE 
+    }, '1500');
       
       if(type === 'movie'){
           get_data_movie_focus(); 
@@ -36,20 +40,16 @@ function Target() {
 
 
   const get_data_movie_focus = () => {
-    dispatch(toggleFocusReload());
-    dispatch(toggleNonFocusReload());
+    //dispatch(toggleFocusReload());
+    //dispatch(toggleNonFocusReload());
       Fetch_movie(id)
       .then((result) => {
         dispatch(setFocus(result));
         Fetch_movie_credits(id)
         .then((creds) =>{
-          dispatch(setNonFocus(creds));        
-          setTimeout( ()=>{
-           // dispatch(toggleNonFocusReload()); //added
-            dispatch(toggleNonFocusVisibility()); //added
-    
-           },"1000")
+          dispatch(setNonFocus(creds));   
 
+  
         })
         .catch((err) => console.log(err)); 
       }) 
@@ -58,8 +58,8 @@ function Target() {
   }
     
   const get_data_person_focus = () =>{
-    dispatch(toggleFocusReload());
-    dispatch(toggleNonFocusReload());
+    //dispatch(toggleFocusReload());
+   // dispatch(toggleNonFocusReload());
 
     Fetch_individual(id)
     .then((result) => {
@@ -67,12 +67,6 @@ function Target() {
       Fetch_individual_credits(id)
       .then((movies) =>{
         dispatch(setNonFocus(movies)); 
-        //set_active(Number(true));
-        setTimeout( ()=>{
-          //dispatch(toggleNonFocusReload()); //added
-          dispatch(toggleNonFocusVisibility()); //added
-  
-         },"1000")
 
       })
       .catch((err) => console.log(err)); 
@@ -100,16 +94,11 @@ function Target() {
 
  
     const handle_click = () => {
-        dispatch(toggleNonFocusVisibility());
+        dispatch(toggleFocusReload());
+        dispatch(toggleNonFocusVisibility()); //HIDE
+        dispatch(toggleNonFocusReload()); //SPEED UP
         dispatch(setFocusID(Math.floor(Math.random() * 1000)));
-        //dispatch(toggleNonFocusReload());
-        //dispatch(toggleNonFocusVisibility());
-        setTimeout( ()=>{
-         // dispatch(toggleNonFocusReload());
-          //dispatch(toggleNonFocusVisibility());
- 
-        },"1000"
-        )
+
     }
   
     return(

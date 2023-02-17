@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { Image, Text } from '@react-three/drei'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setFocus, setFocusID, toggleFocusReload} from '../State_management/focusSlice';
+import { setNonFocus, toggleNonFocusReload, toggleNonFocusVisibility } from '../State_management/nonFocusSlice';
 
 function PosterImage(props) {
 
@@ -12,6 +14,7 @@ function PosterImage(props) {
     const focus_display_name = useSelector((state)=>state.focus.displayName);
     const type = useSelector((state) => state.type.value)
     const id = useSelector((state) => state.type.id)
+    const dispatch = useDispatch();
 
    
 
@@ -33,12 +36,14 @@ function PosterImage(props) {
                 let temp_name = nonFocus[props.index].displayName;
                 if(temp_name == undefined || temp_url == undefined){
                     set_name('No Info to Display');
+
                     console.log(nonFocus[props.index])
                 }
                 else{
                     set_url(nonFocus[props.index].url);
                     set_name(nonFocus[props.index].displayName)
                     console.log(nonFocus[props.index].url, nonFocus[props.index].displayName)
+
                 }
 
             }
